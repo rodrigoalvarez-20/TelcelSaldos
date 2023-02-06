@@ -7,9 +7,10 @@ import os
 def select_binary():
     if platform.system() == "Windows":
         binary_path = "{}/bin/windows/chromedriver.exe".format(os.getcwd())
+        return os.path.abspath(binary_path)
     else:
-        binary_path = "{}/bin/linux/chromedriver".format(os.getcwd())
-    return os.path.abspath(binary_path)
+        return "/usr/bin/chromedriver"
+    
 
 
 def scrap_token():

@@ -62,6 +62,7 @@ def obtener_adeudo_cliente(celular: str, request: Request):
     status, resp = make_request(celular, actual_token)
 
     if status == 200:
+        print("Response obtained: {}".format(resp))
         return JSONResponse(status_code=200, content=resp)
     elif status == 401:
         # Recargar la Token y solicitar de nuevo

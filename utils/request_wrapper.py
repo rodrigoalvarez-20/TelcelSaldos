@@ -28,8 +28,7 @@ def make_request(celular: str, token: str):
     print(response.text)
     try:
         json_resp = response.json()
-        return json_resp
-        #return response.status_code, response.json()
+        return response.status_code, json_resp
     except Exception as ex:
         print("Ha ocurrido una excepcion al tratar de obtener los datos: {}".format(str(ex)))
         return 500, response.text

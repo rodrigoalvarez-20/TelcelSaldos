@@ -2,12 +2,16 @@ from starlette.responses import JSONResponse
 from utils.mongo import get_mongo_connection
 from fastapi import FastAPI, Request
 from datetime import datetime
-from utils.scrap_token import scrap_token
+from utils.scrap_token import start_driver, obtain_token
 from utils.auth import auth
 from utils.request_wrapper import make_request
 import uvicorn
 
 app = FastAPI()
+
+global chrome_drv
+chrome_drv = start_driver()
+
 
 def validate_request(request: Request):
     if "Authorization" not in request.headers:
@@ -74,6 +78,23 @@ def obtener_adeudo_cliente(celular: str, request: Request):
         return JSONResponse(status_code=status, content={ "error": resp })
     else:
         return JSONResponse(status_code=status, content=resp)
+
+
+@app.get("/api/token")
+def obtener_toke(request: Request):
+    req_status = validate_request(request)
+    if req_status["status"] != 200:
+        return JSONResponse(status_code=req_status["status"], content={"error": req_status["error"]})
+
+    global chrome_drv
+    if not chrome_drv:
+        chrome_drv = start_driver()
+
+    actual_token = obtain_token(chrome_drv)
+
+    return JSONResponse(status_code=200, content={ "token": actual_token })
+
+
 
 #5610181957
 
